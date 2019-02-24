@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class NorrisJoke {
 
-
     @SerializedName("category")
     @Expose
     private Object category;
@@ -63,4 +62,3 @@ public class NorrisJoke {
     }
 
 }
-
