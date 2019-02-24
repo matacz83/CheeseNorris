@@ -12,19 +12,43 @@ import java.util.Scanner;
 public class ChuckManager {
 
     public static void joke() {
-
         String rawResponse = null;
         try {
-            rawResponse = getResponse("https://api.chucknorris.io/jokes/search?query=chees");
+            rawResponse = getResponse(getCustomJokeResponse());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         List<NorrisJoke> list = getJokeList(rawResponse);
-        System.out.println(list.get(0).getValue());
-        System.out.println("Size: " + list.size() + " jokes");
-        System.out.println("longest joke: " + maxSize(list));
-        System.out.println("shortest joke: " + minSize(list));
+        System.out.println(maxSize(list));
+        System.out.println(minSize(list));
+    }
+
+    private static String getCustomJokeResponse(){
+        Scanner scanner = new Scanner(System.in);
+        String temat = scanner.nextLine();
+        String BASE_URL = "https://api.chucknorris.io/jokes/search?query=";
+        return BASE_URL+temat;
+    }
+
+    private static String maxSize(List<NorrisJoke> list) {
+        String result = "";
+        for (NorrisJoke joke : list) {
+            if (joke.getValue().length() > result.length()) {
+                result = joke.getValue();
+            }
+        }
+        return result;
+    }
+
+    private static String minSize(List<NorrisJoke> list) {
+        String result = list.get(0).getValue();
+        for (NorrisJoke joke : list) {
+            if (joke.getValue().length() < result.length()) {
+                result = joke.getValue();
+            }
+        }
+        return result;
     }
 
     private static String getResponse(String urlQueryString) throws Exception {
@@ -47,24 +71,5 @@ public class ChuckManager {
         NorrisJokeList norrisJokeList = gson.fromJson(rawJSON, NorrisJokeList.class);
         return norrisJokeList.getResult();
     }
-    private static String maxSize(List<NorrisJoke> list) {
-        String result = "";
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getValue().length() > result.length()) {
-                result = list.get(i).getValue();
-            }
-        }
-            return result;
-        }
-
-    private static String minSize(List<NorrisJoke> list) {
-        String result = list.get(0).getValue();
-        for (NorrisJoke joke : list) {
-            if (joke.getValue().length() < result.length()) {
-                result = joke.getValue();
-            }
-        }
-            return result;
-        }
 
 }
